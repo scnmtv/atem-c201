@@ -1,5 +1,6 @@
 #ATEM Inputs
-
+Input | #
+--- | ---
 Black|0
 Color 1|2001
 Color 2|2002
