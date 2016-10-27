@@ -6,34 +6,34 @@ void extraButtonsCommands2()  {
 
   // B1: "BARS"
   if (extraButtons.isButtonIn(1, buttonDownPress))  {   // Executes button command if pressed:
-    AtemSwitcher.changePreviewInput(9);
+    AtemSwitcher.changePreviewInput(1000);
   }
-  extraButtons.setButtonColor(1, AtemSwitcher.getPreviewInput()==9 ? 3 : 5);  // Sets color of button to AMBER (2) if in AUX1 BUS mode. Otherwise color "5" which is dimmed yellow
- 
+  extraButtons.setButtonColor(1, AtemSwitcher.getProgramInput()==1000 ? 2 : (AtemSwitcher.getPreviewInput()==1000 ? 3 : 5));  // Sets color of button to AMBER (2) if in AUX1 BUS mode. Otherwise color "5" which is dimmed yellow
+  
   // B2: "COL1"
   if (extraButtons.isButtonIn(2, buttonDownPress))  {   // Executes button command if pressed:
-    AtemSwitcher.changePreviewInput(10);
+    AtemSwitcher.changePreviewInput(2001);
   }
-  extraButtons.setButtonColor(2, AtemSwitcher.getPreviewInput()==10 ? 3 : 5);  // Sets color of button to AMBER (2) if in AUX1 BUS mode. Otherwise color "5" which is dimmed yellow
- 
-  // B3: "Key1"
+  extraButtons.setButtonColor(2, AtemSwitcher.getProgramInput()==2001 ? 2 : (AtemSwitcher.getPreviewInput()==2001 ? 3 : 5));  // Sets color of button to AMBER (2) if in AUX1 BUS mode. Otherwise color "5" which is dimmed yellow
+
+  // B3: "COL2"
   if (extraButtons.isButtonIn(3, buttonDownPress))  {   // Executes button command if pressed:
-    AtemSwitcher.changeUpstreamKeyOn(1,!AtemSwitcher.getUpstreamKeyerStatus(1));  // Toggle upstream keyer 1 by sending the opposite value of the current value.
+    AtemSwitcher.changePreviewInput(2002);
   }
-  extraButtons.setButtonColor(3, AtemSwitcher.getUpstreamKeyerStatus(1) ? 2 : 5);  // Sets color of button to RED (2) if upstream keyer 4 is active. Otherwise color "5" which is dimmed yellow
-
-  // B4: "Key2"
-  if (extraButtons.isButtonIn(4, buttonDownPress))  {   // Executes button command if pressed:
-    AtemSwitcher.changeUpstreamKeyOn(2,!AtemSwitcher.getUpstreamKeyerStatus(2));  // Toggle upstream keyer 1 by sending the opposite value of the current value.
-  }
-  extraButtons.setButtonColor(4, AtemSwitcher.getUpstreamKeyerStatus(2) ? 2 : 5);  // Sets color of button to RED (2) if upstream keyer 4 is active. Otherwise color "5" which is dimmed yellow
-
-  // B5: "PIP"
+  extraButtons.setButtonColor(3, AtemSwitcher.getProgramInput()==2002 ? 2 : (AtemSwitcher.getPreviewInput()==2002 ? 3 : 5));  // Sets color of button to AMBER (2) if in AUX1 BUS mode. Otherwise color "5" which is dimmed yellow
+ 
+  // B5: "Key1"
   if (extraButtons.isButtonIn(5, buttonDownPress))  {   // Executes button command if pressed:
-    cmd_pipToggle();
+    AtemSwitcher.changeUpstreamKeyOn(1,!AtemSwitcher.getUpstreamKeyerStatus(1));  // Toggle upstream keyer 1 by sending the opposite value of the current value.
   }
   extraButtons.setButtonColor(5, AtemSwitcher.getUpstreamKeyerStatus(1) ? 2 : 5);  // Sets color of button to RED (2) if upstream keyer 4 is active. Otherwise color "5" which is dimmed yellow
 
+  // B4: "Black"
+  if (extraButtons.isButtonIn(4, buttonDownPress))  {   // Executes button command if pressed:
+    AtemSwitcher.changePreviewInput(0);
+  }
+  extraButtons.setButtonColor(4, AtemSwitcher.getProgramInput()==0 ? 2 : (AtemSwitcher.getPreviewInput()==0 ? 3 : 5));
+  
   // B6: "Fade To Black"
   if (extraButtons.isButtonIn(6, buttonDownPress))  {   // Executes button command if pressed:
     AtemSwitcher.fadeToBlackActivate();

@@ -814,7 +814,7 @@ void setup() {
        // Red by default:
     previewSelect.setDefaultColor(2);
     programSelect.setDefaultColor(2);
-    cmdSelect.setDefaultColor(2); 
+    cmdSelect.setDefaultColor(0); 
     extraButtons.setDefaultColor(2);
 
     previewSelect.setButtonColorsToDefault();
@@ -960,7 +960,7 @@ void loop() {
   
         previewSelect.setDefaultColor(5);  // Dimmed by default
         programSelect.setDefaultColor(5);  // Dimmed by default
-        cmdSelect.setDefaultColor(5);  // Dimmed by default
+        cmdSelect.setDefaultColor(0);  // Dimmed by default
         extraButtons.setDefaultColor(5);  // Dimmed by default
 
         previewSelect.setButtonColorsToDefault();
@@ -1134,7 +1134,7 @@ void menuValues_printSource(int sVal)  {
        case 17: LCD.print("Preview"); break;
        case 18: LCD.print("Clean Feed 1"); break;
        case 19: LCD.print("Clean Feed 2"); break;
-       default: LCD.print("N/A"); break;
+       default: LCD.print(sVal); break;
    } 
 }
 
@@ -1155,7 +1155,7 @@ void menuValues_printTrType(int sVal)  {
  * Button State Colors set:
  ***********************************/
 void setButtonColors()  {
-
+  
     // Setting colors of PREVIEW input select buttons:
     for (uint8_t i=1;i<=8;i++)  {
       if (AtemSwitcher.getPreviewTally(i))  {
@@ -1220,10 +1220,10 @@ void setButtonColors()  {
       break;
        case 5:
           // Setting colors of the command buttons:
-          cmdSelect.setButtonColor(5, AtemSwitcher.getDownstreamKeyTie(1) ? 4 : 5);
-          cmdSelect.setButtonColor(6, AtemSwitcher.getDownstreamKeyTie(2) ? 4 : 5); 
-          cmdSelect.setButtonColor(3, AtemSwitcher.getDownstreamKeyerStatus(1) ? 4 : 5);
-          cmdSelect.setButtonColor(8, AtemSwitcher.getDownstreamKeyerStatus(2) ? 4 : 5);
+          cmdSelect.setButtonColor(5, AtemSwitcher.getDownstreamKeyTie(1) ? 4 : 0);
+          cmdSelect.setButtonColor(6, AtemSwitcher.getDownstreamKeyTie(2) ? 4 : 0); 
+          cmdSelect.setButtonColor(3, AtemSwitcher.getDownstreamKeyerStatus(1) ? 2 : 0);
+          cmdSelect.setButtonColor(8, AtemSwitcher.getDownstreamKeyerStatus(2) ? 2 : 0);
       break;
       default:
           // Setting colors of the command buttons:
@@ -1235,11 +1235,11 @@ void setButtonColors()  {
     }
 
     if (!cmdSelect.buttonIsPressed(1))  {
-      cmdSelect.setButtonColor(1, 5);   // de-highlight CUT button
+      cmdSelect.setButtonColor(1, 0);   // de-highlight CUT button
     }
-    cmdSelect.setButtonColor(2, AtemSwitcher.getTransitionPosition()>0 ? 4 : 5);     // Auto button
-    cmdSelect.setButtonColor(7, AtemSwitcher.getDownstreamKeyerStatus(1) ? 4 : 5);    // DSK1 button
-    cmdSelect.setButtonColor(4, AtemSwitcher.getDownstreamKeyerStatus(2) ? 4 : 5);    // DSK2 button
+    cmdSelect.setButtonColor(2, AtemSwitcher.getTransitionPosition()>0 ? 2 : 0);     // Auto button
+    cmdSelect.setButtonColor(7, AtemSwitcher.getDownstreamKeyerStatus(1) ? 2 : 0);    // DSK1 button
+    cmdSelect.setButtonColor(4, AtemSwitcher.getDownstreamKeyerStatus(2) ? 2 : 0);    // DSK2 button
 }
 
 
@@ -1286,7 +1286,7 @@ void readingButtonsAndSendingCommands() {
     // Cut button:
     uint8_t cmdSelection = cmdSelect.buttonDownAll();
     if (cmdSelection & (B1 << 0))  { 
-      cmdSelect.setButtonColor(1, 4);    // Highlight CUT button
+      cmdSelect.setButtonColor(1, 2);    // Highlight CUT button
       AtemSwitcher.doCut(); 
       preVGA_active = false;
     }
