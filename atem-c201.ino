@@ -1124,17 +1124,17 @@ void menuValues_printSource(int sVal)  {
        case 6: LCD.print("Camera 6"); break;
        case 7: LCD.print("Camera 7"); break;
        case 8: LCD.print("Camera 8"); break;
-       case 9: LCD.print("Color Bars"); break;
-       case 10: LCD.print("Color 1"); break;
-       case 11: LCD.print("Color 2"); break;
-       case 12: LCD.print("Media Player 1"); break;
-       case 13: LCD.print("Media Play.1 key"); break;
-       case 14: LCD.print("Media Player 2"); break;
-       case 15: LCD.print("Media Play.2 key"); break;
-       case 16: LCD.print("Program"); break;
-       case 17: LCD.print("Preview"); break;
-       case 18: LCD.print("Clean Feed 1"); break;
-       case 19: LCD.print("Clean Feed 2"); break;
+       case 1000: LCD.print("Color Bars"); break;
+       case 2001: LCD.print("Color 1"); break;
+       case 2002: LCD.print("Color 2"); break;
+       case 3010: LCD.print("Media Player 1"); break;
+       case 3011: LCD.print("Media Play.1 key"); break;
+       case 3020: LCD.print("Media Player 2"); break;
+       case 3021: LCD.print("Media Play.2 key"); break;
+       case 10001: LCD.print("Program"); break;
+       case 10011: LCD.print("Preview"); break;
+       case 7001: LCD.print("Clean Feed 1"); break;
+       case 7002: LCD.print("Clean Feed 2"); break;
        default: LCD.print(sVal); break;
    } 
 }
