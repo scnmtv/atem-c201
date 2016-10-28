@@ -1208,10 +1208,10 @@ void setButtonColors()  {
       break; 
        case 3:
           // Setting colors of the command buttons:
-          cmdSelect.setButtonColor(5, AtemSwitcher.getProgramInput()==10 ? 2 : (AtemSwitcher.getPreviewInput()==10 ? 3 : 5));     // Color1
-          cmdSelect.setButtonColor(6, AtemSwitcher.getProgramInput()==11 ? 2 : (AtemSwitcher.getPreviewInput()==11 ? 3 : 5));     // Color2
-          cmdSelect.setButtonColor(3, AtemSwitcher.getProgramInput()==0 ? 2 : (AtemSwitcher.getPreviewInput()==0 ? 3 : 5));     // Black
-          cmdSelect.setButtonColor(8, AtemSwitcher.getProgramInput()==9 ? 2 : (AtemSwitcher.getPreviewInput()==9 ? 3 : 5));     // Bars
+          cmdSelect.setButtonColor(5, AtemSwitcher.getProgramInput()==10 ? 2 : (AtemSwitcher.getPreviewInput()==2001 ? 3 : 0));     // Color1
+          cmdSelect.setButtonColor(6, AtemSwitcher.getProgramInput()==11 ? 2 : (AtemSwitcher.getPreviewInput()==2002 ? 3 : 0));     // Color2
+          cmdSelect.setButtonColor(3, AtemSwitcher.getProgramInput()==0 ? 2 : (AtemSwitcher.getPreviewInput()==0 ? 3 : 0));     // Black
+          cmdSelect.setButtonColor(8, AtemSwitcher.getProgramInput()==9 ? 2 : (AtemSwitcher.getPreviewInput()==1000 ? 3 : 0));     // Bars
       break; 
        case 4:
           // Setting colors of the command buttons:
@@ -1345,10 +1345,10 @@ void readingButtonsAndSendingCommands() {
           if (cmdSelection & (B1 << 7))  { AtemSwitcher.changeUpstreamKeyOn(4, !AtemSwitcher.getUpstreamKeyerStatus(4)); }  // Key4
        break;
        case 3:
-          if (cmdSelection & (B1 << 4))  { AtemSwitcher.changePreviewInput(10); }  // Color1
-          if (cmdSelection & (B1 << 5))  { AtemSwitcher.changePreviewInput(11); }  // Color2  
+          if (cmdSelection & (B1 << 4))  { AtemSwitcher.changePreviewInput(2001); }  // Color1
+          if (cmdSelection & (B1 << 5))  { AtemSwitcher.changePreviewInput(2002); }  // Color2  
           if (cmdSelection & (B1 << 2))  { AtemSwitcher.changePreviewInput(0); }   // Black
-          if (cmdSelection & (B1 << 7))  { AtemSwitcher.changePreviewInput(9); }  // Bars
+          if (cmdSelection & (B1 << 7))  { AtemSwitcher.changePreviewInput(1000); }  // Bars
        break;
        case 4:
           if (cmdSelection & (B1 << 4))  { BUSselect= BUSselect==1 ? 0 : 1;   }
