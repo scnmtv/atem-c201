@@ -2,6 +2,7 @@
 Input | #
 --- | ---
 Black|0
+ColorBars | 1000
 Color 1|2001
 Color 2|2002
 Media Player 1|3010
