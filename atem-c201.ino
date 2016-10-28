@@ -169,8 +169,8 @@ MenuBackend menu = MenuBackend(menuUseEvent,menuChangeEvent);
     MenuItem menu_ftbtime = MenuItem(menu, "FTB Time", 2);
     MenuItem menu_ftbexec = MenuItem(menu, "Do Fade to Black", 2);
   MenuItem menu_aux1      = MenuItem(menu, "AUX 1", 1);    // (As Media Bank 1)
-  MenuItem menu_aux2      = MenuItem(menu, "AUX 2", 1);    // (As Media Bank 1)
-  MenuItem menu_aux3      = MenuItem(menu, "AUX 3", 1);    // (As Media Bank 1)
+  //MenuItem menu_aux2      = MenuItem(menu, "AUX 2", 1);    // (As Media Bank 1)
+  //MenuItem menu_aux3      = MenuItem(menu, "AUX 3", 1);    // (As Media Bank 1)
   MenuItem menu_network   = MenuItem(menu, "Network", 1);
     MenuItem menu_ownIP   = MenuItem(menu, "Own IP", 2);
     MenuItem menu_AtemIP  = MenuItem(menu, "ATEM IP", 2);
@@ -191,9 +191,9 @@ void menuSetup()
     menu_userbut.addAfter(menu_trans);
     menu_trans.addAfter(menu_ftb);
     menu_ftb.addAfter(menu_aux1);
-    menu_aux1.addAfter(menu_aux2);
-    menu_aux2.addAfter(menu_aux3);
-    menu_aux3.addAfter(menu_UP2);
+    menu_aux1.addAfter(menu_UP2);
+    //menu_aux2.addAfter(menu_aux3);
+    //menu_aux3.addAfter(menu_UP2);
 
       // Set up user button menu:
     menu_usrcfg1.addAfter(menu_usrcfg2);  // Chain subitems...
@@ -298,8 +298,8 @@ void menuChangeEvent(MenuChangeEvent changed)
         if (changed.to.getName() == menu_mediab1.getName())  { setMenuValues=1;  }
         if (changed.to.getName() == menu_mediab2.getName())  { setMenuValues=2;  }
         if (changed.to.getName() == menu_aux1.getName())  { setMenuValues=3;  }
-        if (changed.to.getName() == menu_aux2.getName())  { setMenuValues=4;  }
-        if (changed.to.getName() == menu_aux3.getName())  { setMenuValues=5;  }
+        //if (changed.to.getName() == menu_aux2.getName())  { setMenuValues=4;  }
+        //if (changed.to.getName() == menu_aux3.getName())  { setMenuValues=5;  }
         if (changed.to.getName() == menu_trtype.getName())  { setMenuValues=10;  }
         if (changed.to.getName() == menu_trtime.getName())  { setMenuValues=11;  }
         if (changed.to.getName() == menu_ftbtime.getName())  { setMenuValues=20;  }
