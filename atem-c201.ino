@@ -672,6 +672,7 @@ void defaultCmd(WebServer &server, WebServer::ConnectionType type, char *url_tai
 
 
 bool isConfigMode;  // If set, the system will run the Web Configurator, not the normal program
+bool shiftState=false;
 
 void setup() { 
   //Serial.begin(9600);
@@ -1221,10 +1222,18 @@ void setButtonColors()  {
       break;
        case 5:
           // Setting colors of the command buttons:
-          cmdSelect.setButtonColor(5, AtemSwitcher.getDownstreamKeyTie(1) ? 4 : 0);
-          cmdSelect.setButtonColor(6, AtemSwitcher.getDownstreamKeyTie(2) ? 4 : 0); 
-          cmdSelect.setButtonColor(3, AtemSwitcher.getDownstreamKeyerStatus(1) ? 2 : 0);
-          cmdSelect.setButtonColor(8, AtemSwitcher.getDownstreamKeyerStatus(2) ? 2 : 0);
+          if(!shiftState){
+            cmdSelect.setButtonColor(5, AtemSwitcher.getUpstreamKeyerOnNextTransitionStatus(0) ? 4 : 0);
+            cmdSelect.setButtonColor(6, AtemSwitcher.getUpstreamKeyerOnNextTransitionStatus(1) ? 4 : 0); 
+            cmdSelect.setButtonColor(3, AtemSwitcher.getDownstreamKeyerStatus(1) ? (AtemSwitcher.getDownstreamKeyTie(1) ? 4 : 2) : (AtemSwitcher.getDownstreamKeyTie(1) ? 3 : 0));
+            cmdSelect.setButtonColor(8, AtemSwitcher.getDownstreamKeyerStatus(2) ? (AtemSwitcher.getDownstreamKeyTie(2) ? 4 : 2) : (AtemSwitcher.getDownstreamKeyTie(2) ? 3 : 0));
+          } else {
+            cmdSelect.setButtonColor(5, AtemSwitcher.getDownstreamKeyerAuto(1) ? 2 : 0);
+            cmdSelect.setButtonColor(6, AtemSwitcher.getDownstreamKeyerAuto(2) ? 2 : 0);
+            cmdSelect.setButtonColor(3, AtemSwitcher.getDownstreamKeyerStatus(1) ? 2 : 0);
+            cmdSelect.setButtonColor(8, AtemSwitcher.getDownstreamKeyerStatus(2) ? 2 : 0);
+          }
+         
       break;
       default:
           // Setting colors of the command buttons:
@@ -1238,9 +1247,15 @@ void setButtonColors()  {
     if (!cmdSelect.buttonIsPressed(1))  {
       cmdSelect.setButtonColor(1, 0);   // de-highlight CUT button
     }
+    
     cmdSelect.setButtonColor(2, AtemSwitcher.getTransitionPosition()>0 ? 2 : 0);     // Auto button
-    cmdSelect.setButtonColor(7, AtemSwitcher.getDownstreamKeyerStatus(1) ? 2 : 0);    // DSK1 button
-    cmdSelect.setButtonColor(4, AtemSwitcher.getDownstreamKeyerStatus(2) ? 2 : 0);    // DSK2 button
+    cmdSelect.setButtonColor(7, AtemSwitcher.getUpstreamKeyerStatus(1) ? 2 : 0); //Sedaj je to KEY1 air. Nedelujoč ugašnjena led, prižgan pa rdeč
+    //AtemSwitcher.getDownstreamKeyerStatus(1) ? 2 : 0);    // DSK1 button
+    if (!cmdSelect.buttonIsPressed(4))  {
+      cmdSelect.setButtonColor(4, 0);   // de-highlight SHIFT button
+      shiftState=false;
+    }
+    //cmdSelect.setButtonColor(4, AtemSwitcher.getDownstreamKeyerStatus(2) ? 2 : 0);    // DSK2 button
 }
 
 
@@ -1298,15 +1313,23 @@ void readingButtonsAndSendingCommands() {
       preVGA_active = false;
     }
 
-    // DSK1 button:
-    if (cmdSelection & (B1 << 6))  { 
-      AtemSwitcher.changeDownstreamKeyOn(1, !AtemSwitcher.getDownstreamKeyerStatus(1));
+    // TO JE CISTO DESNI ZGORNJI GUMB, MORA BIT KEY1AIR trenutno DSK1 button:
+    if (cmdSelection & (B1 << 6))  {
+      AtemSwitcher.changeUpstreamKeyOn(1,!AtemSwitcher.getUpstreamKeyerStatus(1)); 
+      //AtemSwitcher.changeDownstreamKeyOn(1, !AtemSwitcher.getDownstreamKeyerStatus(1));
     }
 
-    // DSK2 button:
+    // TUKAJ BO PA SHIFT KEY;
     if (cmdSelection & (B1 << 3))  { 
-      AtemSwitcher.changeDownstreamKeyOn(2, !AtemSwitcher.getDownstreamKeyerStatus(2));
+      cmdSelect.setButtonColor(4, 4);    // Highlight CUT button
+      shiftState=true;
     }
+    
+    /*
+    if (cmdSelection & (B1 << 3))  { 
+      shiftState= !shiftState;
+    }
+    //*/
 
     switch(userButtonMode)  {
        case 1:
@@ -1334,11 +1357,20 @@ void readingButtonsAndSendingCommands() {
           if (cmdSelection & (B1 << 7))  { BUSselect= 0;   }   
       break;
        case 5:
-          if (cmdSelection & (B1 << 4))  { AtemSwitcher.changeDownstreamKeyTie(1,!AtemSwitcher.getDownstreamKeyTie(1));};
-          if (cmdSelection & (B1 << 5))  { AtemSwitcher.changeDownstreamKeyTie(2,!AtemSwitcher.getDownstreamKeyTie(2));};
-          if (cmdSelection & (B1 << 2))  { AtemSwitcher.doAutoDownstreamKeyer(1); };
-          if (cmdSelection & (B1 << 7))  { AtemSwitcher.doAutoDownstreamKeyer(2); };
-          
+          if(!shiftState){
+            if (cmdSelection & (B1 << 4))  { AtemSwitcher.changeUpstreamKeyNextTransition(0,!AtemSwitcher.getUpstreamKeyerOnNextTransitionStatus(0));}; //tu naj bo BACKGROUND (pri izbirah overlaya), s shiftom je DSK1 CUT
+            if (cmdSelection & (B1 << 5))  { AtemSwitcher.changeUpstreamKeyNextTransition(1,!AtemSwitcher.getUpstreamKeyerOnNextTransitionStatus(1));}; //tu naj bo KEY1 (to je da ga da na preview), s shiftom je DSK2 CUT
+            if (cmdSelection & (B1 << 2))  { AtemSwitcher.changeDownstreamKeyTie(1, !AtemSwitcher.getDownstreamKeyTie(1)); }; //tu naj bo DSK1 TIE, s shiftom DSK1 AUTO
+            if (cmdSelection & (B1 << 7))  { AtemSwitcher.changeDownstreamKeyTie(2, !AtemSwitcher.getDownstreamKeyTie(2)); }; //tu naj bo DSK2 TIE, s shiftom DSK2 AUTO
+          } else {
+          //* 
+            if (cmdSelection & (B1 << 4))  { AtemSwitcher.doAutoDownstreamKeyer(1); }; //tu naj bo DSK1 TIE, s shiftom DSK1 AUTO
+            if (cmdSelection & (B1 << 5))  { AtemSwitcher.doAutoDownstreamKeyer(2); }; //tu naj bo DSK 2 TIE, s shiftom DSK2 AUTO
+            if (cmdSelection & (B1 << 2))  { AtemSwitcher.changeDownstreamKeyOn(1,!AtemSwitcher.getDownstreamKeyerStatus(1));}; //tu naj bo BACKGROUND (pri izbirah overlaya), s shiftom je DSK1 CUT
+            if (cmdSelection & (B1 << 7))  { AtemSwitcher.changeDownstreamKeyOn(2,!AtemSwitcher.getDownstreamKeyerStatus(2));}; //tu naj bo KEY1 (to je da ga da na preview), s shiftom je DSK2 CUT
+            
+          //*/
+          }
       break;
        default:
           if (cmdSelection & (B1 << 4))  { AtemSwitcher.changeDownstreamKeyOn(1, !AtemSwitcher.getDownstreamKeyerStatus(1)); }  // DSK1
