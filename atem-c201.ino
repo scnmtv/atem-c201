@@ -150,6 +150,7 @@ void lcdPrintValue(int number, uint8_t padding)  {
 uint8_t userButtonMode = 0;  // 0-3
 uint8_t setMenuValues = 0;  //
 uint8_t BUSselect = 0;  // Preview/Program by default
+uint8_t inputs[8] = {1,2,3,4,5,6,7,8}
 
 // Configuration of the menu items and hierarchi plus call-back functions:
 MenuBackend menu = MenuBackend(menuUseEvent,menuChangeEvent);
@@ -608,6 +609,16 @@ void webDefaultView(WebServer &server, WebServer::ConnectionType type)
   }
   server << "<hr/>";
 
+  server << "<h1>Input Assignment</h1>";
+  for (i = 0; i < 8; i++) 
+  {
+    server << "Button " << i+1 << ":";
+    server << "<input type='text' name='INPUT" << i << "' value='" << EEPROM.read(i+20) << "' id='INPUT" << i << "' size='6'>";
+    server << "<br/>";  
+  }
+
+  server << "For special inputs, please refer to <a href='https://github.com/sestg/atem-c201/blob/master/inputs.md#atem-inputs'>this</a> table.";
+
   // End form and page:
   server << "<input type='submit' value='Submit'/></form></div>";
   server << "<br><i>(Reset / Pull the power after submitting the form successfully)</i>";
@@ -640,6 +651,15 @@ void formCmd(WebServer &server, WebServer::ConnectionType type, char *url_tail, 
         int val = strtoul(value, NULL, 10);
         if (addr>=0 && addr <=3)  {
           EEPROM.write(addr+2+4, val);  // IP address stored in bytes 4-7
+        }
+      }
+      
+      // Input assignment:
+      if (Name.startsWith("INPUT"))  {
+        int input = strtoul(name + 5, NULL, 10);
+        int val = strtoul(value, NULL, 10);
+        if (input>=0 && input <=7)  {
+          EEPROM.write(input+20, val);  // IP address stored in bytes 4-7
         }
       }
 
@@ -728,6 +748,11 @@ void setup() {
 
     //Set default user button mode
     EEPROM.write(17,0);
+
+    //Set default button assignments
+    for (int i = 0; i < 8;i++) {
+      EEPROM.write(i+20, i+1);  
+    }
   }
   
  
