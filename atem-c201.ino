@@ -65,8 +65,8 @@ template<class T> inline Print &operator <<(Print &obj, T arg)
 
 
 // Include ATEM library and make an instance:
-#include <ATEMmax.h>
-ATEMmax AtemSwitcher;
+#include <ATEMext.h>
+ATEMext AtemSwitcher;
 
 // All related to library "SkaarhojBI8", which controls the buttons:
 #include "Wire.h"
@@ -150,7 +150,7 @@ void lcdPrintValue(int number, uint8_t padding)  {
 uint8_t userButtonMode = 0;  // 0-3
 uint8_t setMenuValues = 0;  //
 uint8_t BUSselect = 0;  // Preview/Program by default
-uint8_t inputs[8] = {1,2,3,4,5,6,7,8}
+uint8_t inputs[8] = {1,2,3,4,5,6,7,8};
 
 // Configuration of the menu items and hierarchi plus call-back functions:
 MenuBackend menu = MenuBackend(menuUseEvent,menuChangeEvent);
