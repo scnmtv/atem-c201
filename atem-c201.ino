@@ -799,6 +799,10 @@ void setup() {
     while(true);
   }
 
+  for (int i = 0; i<8;i++) {
+      inputs[i] = EEPROM.read(20+i);
+  }
+
   Ethernet.begin(mac, ip);
 
   // ********************
@@ -1241,14 +1245,14 @@ void readingButtonsAndSendingCommands() {
     // Sending commands for PREVIEW input selection:
     uint8_t busSelection = previewSelect.buttonDownAll();
     for (uint8_t i=1;i<=8;i++)  {
-      if (previewSelect.isButtonIn(i, busSelection))  { AtemSwitcher.setPreviewInputVideoSource(0, i); }  
+      if (previewSelect.isButtonIn(i, busSelection))  { AtemSwitcher.setPreviewInputVideoSource(0, inputs[i-1]); }  
     }
 
     // Sending commands for PROGRAM input selection:
     busSelection = programSelect.buttonDownAll();
     if (BUSselect==0)  {
       for (uint8_t i=1;i<=8;i++)  {
-        if (programSelect.isButtonIn(i, busSelection))  { AtemSwitcher.setProgramInputVideoSource(0, i); }
+        if (programSelect.isButtonIn(i, busSelection))  { AtemSwitcher.setProgramInputVideoSource(0, inputs[i-1]); }
       }
     } else if (BUSselect<=3)  {
       for (uint8_t i=1;i<=8;i++)  {
