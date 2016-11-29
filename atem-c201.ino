@@ -1129,7 +1129,7 @@ void menuValues_clearValueLine()  {
 }
 void menuValues_printValue(int number, uint8_t pos, uint8_t padding)  {
           lcdPosition(1,0);
-          for (int i = 0;i<pos;i++) LCD.print(" ")
+          for (int i = 0;i<pos;i++) LCD.print(" ");
           LCD.print(number);
           for(int i=String(number).length()+pos-1; i<16; i++)  {
             LCD.print(" ");
