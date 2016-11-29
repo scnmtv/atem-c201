@@ -1048,8 +1048,9 @@ void menuValues()  {
             if (sVal>20) sVal=1;
             if (sVal<1) sVal=20;
             AtemSwitcher.setMediaPlayerSourceStillIndex(setMenuValues-1, sVal-1) ;
+            menuValues_clearValueLine();
           }
-          menuValues_clearValueLine();
+          //menuValues_clearValueLine();
           lcdPosition(1,0);
           LCD << F("Still ");
           menuValues_printValue(sVal,6,3);
@@ -1063,8 +1064,9 @@ void menuValues()  {
             if (sVal>7) sVal=0;
             if (sVal<0) sVal=7;
             AtemSwitcher.setAuxSourceInput(setMenuValues-3, sVal);
+            menuValues_clearValueLine();
           }
-          menuValues_clearValueLine();
+          //menuValues_clearValueLine();
           lcdPosition(1,0);
           menuValues_printSource(sVal);
         break;
@@ -1078,7 +1080,7 @@ void menuValues()  {
             AtemSwitcher.setTransitionStyle(0, sVal);
             menuValues_clearValueLine();
           }
-          menuValues_clearValueLine();
+          //menuValues_clearValueLine();
           lcdPosition(1,0);
           menuValues_printTrType(sVal);
         break;
@@ -1091,7 +1093,7 @@ void menuValues()  {
             AtemSwitcher.setTransitionMixRate(0, sVal);
             menuValues_clearValueLine();
           }
-          menuValues_clearValueLine();
+          //menuValues_clearValueLine();
           lcdPosition(1,0);
           LCD << F("Frames: ");
           menuValues_printValue(sVal,8,3);
@@ -1105,7 +1107,7 @@ void menuValues()  {
             AtemSwitcher.setFadeToBlackRate(0, sVal);
             menuValues_clearValueLine();
           }
-          menuValues_clearValueLine();
+          //menuValues_clearValueLine();
           lcdPosition(1,0);
           LCD << F("Frames: ");
           menuValues_printValue(sVal,8,3);
@@ -1126,9 +1128,10 @@ void menuValues_clearValueLine()  {
           LCD.print("                ");
 }
 void menuValues_printValue(int number, uint8_t pos, uint8_t padding)  {
-          lcdPosition(1,pos);
+          lcdPosition(1,0);
+          for (int i = 0;i<pos;i++) LCD.print(" ")
           LCD.print(number);
-          for(int i=String(number).length(); i<padding; i++)  {
+          for(int i=String(number).length()+pos-1; i<16; i++)  {
             LCD.print(" ");
           }
 }
