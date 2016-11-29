@@ -617,7 +617,7 @@ void webDefaultView(WebServer &server, WebServer::ConnectionType type)
     server << "<br/>";  
   }
 
-  server << "For special inputs, please refer to <a href='https://github.com/sestg/atem-c201/blob/master/inputs.md#atem-inputs'>this</a> table.";
+  server << "For special inputs, please refer to <a href='https://github.com/sestg/atem-c201/blob/master/inputs.md#atem-inputs' target='_blank'>this</a> table.";
 
   // End form and page:
   server << "<input type='submit' value='Submit'/></form></div>";
@@ -839,8 +839,8 @@ void setup() {
     LCD.print(ip[3]);
 
        // Red by default:
-    previewSelect.setDefaultColor(2);
-    programSelect.setDefaultColor(2);
+    previewSelect.setDefaultColor(0);
+    programSelect.setDefaultColor(0);
     cmdSelect.setDefaultColor(0); 
     extraButtons.setDefaultColor(2);
 
@@ -887,8 +887,8 @@ void setup() {
     
     // Initializing menu control:
     utils.encoders_init();
-    attachInterrupt(0, _enc1active, RISING);
     attachInterrupt(1, _enc0active, RISING);
+    attachInterrupt(0, _enc1active, RISING);
     
     menuSetup();
 
@@ -943,26 +943,8 @@ void loop() {
     menuValues();
     
     // If connection is gone, try to reconnect:
-    //if (AtemSwitcher.isConnectionTimedOut())  {
-        if (AtemOnline)  {
-          AtemOnline = false;
-  
-         clearLCD();
-         lcdPosition(0,0);
-         LCD.print(F("Connection Lost!"));
-         lcdPosition(1,0);
-         LCD.print(F("Reconnecting... "));
-  
-          previewSelect.setDefaultColor(0);  // Off by default
-          programSelect.setDefaultColor(0);  // Off by default
-          cmdSelect.setDefaultColor(0);  // Off by default
-          extraButtons.setDefaultColor(0);  // Off by default
-
-          previewSelect.setButtonColorsToDefault();
-          programSelect.setButtonColorsToDefault();
-          cmdSelect.setButtonColorsToDefault();
-          extraButtons.setButtonColorsToDefault();
-        }
+    //if (AtemSwitcher.hasInitialized())  {
+        
        
    //    AtemSwitcher.connect();
    // }
@@ -976,8 +958,8 @@ void loop() {
         lcdPosition(0,0);
         LCD.print(F("Connected"));
   
-        previewSelect.setDefaultColor(5);  // Dimmed by default
-        programSelect.setDefaultColor(5);  // Dimmed by default
+        previewSelect.setDefaultColor(0);  // Dimmed by default
+        programSelect.setDefaultColor(0);  // Dimmed by default
         cmdSelect.setDefaultColor(0);  // Dimmed by default
         extraButtons.setDefaultColor(5);  // Dimmed by default
 
@@ -997,6 +979,26 @@ void loop() {
       extraButtonsCommands2();
       AtemSwitcher.runLoop();  // Call here and there...
       
+    } else {
+      if (AtemOnline)  {
+          AtemOnline = false;
+  
+         clearLCD();
+         lcdPosition(0,0);
+         LCD.print(F("Connection Lost!"));
+         lcdPosition(1,0);
+         LCD.print(F("Reconnecting... "));
+  
+          previewSelect.setDefaultColor(0);  // Off by default
+          programSelect.setDefaultColor(0);  // Off by default
+          cmdSelect.setDefaultColor(0);  // Off by default
+          extraButtons.setDefaultColor(0);  // Off by default
+
+          previewSelect.setButtonColorsToDefault();
+          programSelect.setButtonColorsToDefault();
+          cmdSelect.setButtonColorsToDefault();
+          extraButtons.setButtonColorsToDefault();
+        }
     }
   }
 }
@@ -1174,20 +1176,20 @@ void setButtonColors()  {
   
     // Setting colors of PREVIEW input select buttons:
     for (uint8_t i=1;i<=8;i++)  {
-      if (getPreviewTally(i))  {
+      if (getPreviewTally(inputs[i-1]))  {
         previewSelect.setButtonColor(i, 3);
       } else {
-        previewSelect.setButtonColor(i, 5);   
+        previewSelect.setButtonColor(i, 0);   
       }
     }
     
     // Setting colors of PROGRAM input select buttons:
     for (uint8_t i=1;i<=8;i++)  {
       if (BUSselect==0)  {  // Normal: PROGRAM
-        if (getProgramTally(i))  {
+        if (getProgramTally(inputs[i-1]))  {
           programSelect.setButtonColor(i, 2);
         } else {
-          programSelect.setButtonColor(i, 5);   
+          programSelect.setButtonColor(i, 0);   
         }
       } else if (BUSselect<=3)  {  // 1-3: AUX bus:
         if (i==8?(AtemSwitcher.getAuxSourceInput(BUSselect-1)==16):(AtemSwitcher.getAuxSourceInput(BUSselect-1)==i))  {
@@ -1266,6 +1268,7 @@ void readingButtonsAndSendingCommands() {
   
       // "T-bar" slider:
     if (utils.uniDirectionalSlider_hasMoved())  {
+      Serial << "\nT-Bar Moved to " << utils.uniDirectionalSlider_position() << "\n";
       AtemSwitcher.setTransitionPosition(0, utils.uniDirectionalSlider_position());
       lDelay(20);
       if (utils.uniDirectionalSlider_isAtEnd())  {
@@ -1351,6 +1354,7 @@ void changeUpstreamKeyNextTransition(uint8_t keyer, boolean state) {
 //Local delay
 
 void lDelay(unsigned long timeout)  {
+  Serial << timeout;
   unsigned long thisTime = millis();
   do {
     if (isConfigMode)  {
