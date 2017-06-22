@@ -14,5 +14,5 @@ DSK1 Mask|5010
 DSK2 Mask|5020
 Clean Feed 1|7001
 Clean Feed 2|7002
-Program|10001
+Program|10010
 Preview|10011
